@@ -13,12 +13,12 @@ Steps:
 
     - macOS/Linux: source .venv/bin/activate
 
-    - Windows CMD: .venv\Scripts\activate.bat
+    - Windows CMD (Git Bash): source .venv/Scripts/activate
 
     - Windows PowerShell: .venv\Scripts\Activate.ps1
 
 
-2. `pip install google-adk`
+2. `pip install -r requirements.txt`
 3. Have the following project structure
 ```
 parent_folder/
