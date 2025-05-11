@@ -37,3 +37,8 @@ Note: ElevenLabs integration will need ffmpeg
 5. Add ffmpeg to scripts
 - `where ffmpeg` to get installation folder
 - Copy files to Scripts folder
+
+
+Link to generate Reddit API Key: https://www.reddit.com/prefs/apps/
+
+TODO: Add Video Tutorial Links
