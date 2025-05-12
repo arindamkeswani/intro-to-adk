@@ -5,13 +5,11 @@
 - Setup Node.js and npx: Many community MCP servers are distributed as Node.js packages
 - Verify Installations: Confirm adk and npx are available within the activated virtual environment:
 - Use Git Bash
+- Check node version
 
 # Both commands should print the path to the executables.
 which adk
 which npx
-
-# Run using API Server
-
 
 ## MCPToolset
 
