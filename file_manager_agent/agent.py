@@ -3,33 +3,26 @@ from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParamet
 from dotenv import load_dotenv
 load_dotenv()
 
+# ABSOLUTE_FILE_PATH = "C:\\Users\\Asus\\Downloads\\test
+ABSOLUTE_FILE_PATH = "/Users/arindamkeswani/Desktop/Projects/Practice/ai/intro-to-adk"
 
 
-ABSOLUTE_FILE_PATH = "C:\\Users\\Asus\\Downloads\\test"
-# ABSOLUTE_FILE_PATH = "/Users/arindamkeswani/Desktop/Projects/Practice/ai/intro-to-adk"
-
-async def create_agent():
-  """Gets tools from MCP Server."""
-  try:
-    tools, exit_stack = await MCPToolset.from_server(
-        connection_params=StdioServerParameters(
-            command='npx',
-            args=["-y", "@modelcontextprotocol/server-filesystem", ABSOLUTE_FILE_PATH],
-        )
-    )
-    
-
-    agent = LlmAgent(
-        model='gemini-2.0-flash',
-        name='enterprise_assistant',
-        instruction=(
-            'Help user accessing their file systems'
+root_agent = LlmAgent(
+    model='gemini-2.0-flash',
+    name='filesystem_assistant_agent',
+    instruction='Help the user manage their files. You can list files, read files, etc. You can also read files stored in Google Drive.',
+    tools=[
+        MCPToolset(
+            connection_params=StdioServerParameters(
+                command='npx',
+                args=[
+                    "-y",  # Argument for npx to auto-confirm install
+                    "@modelcontextprotocol/server-filesystem",
+                    ABSOLUTE_FILE_PATH
+                ],
+            ),
+            # Optional: Filter which tools from the MCP server are exposed
+            # tool_filter=['list_directory', 'read_file']
         ),
-        tools=tools,
-    )
-    return agent, exit_stack
-  except Exception as e:
-    print("ERROR", e)
-
-
-root_agent = create_agent()
+    ],
+)

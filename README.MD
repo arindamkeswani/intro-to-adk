@@ -5,7 +5,7 @@
 Steps:
 1. Set up the python environment
 
-- Initialize .vnev `python -m venv .venv`
+- Initialize .vnev `python -m venv .venv`/`python3 -m venv .venv`
 
 - Activate virtual env
 
@@ -18,7 +18,8 @@ Steps:
     - Windows PowerShell: .venv\Scripts\Activate.ps1
 
 
-2. `pip install -r requirements.txt`
+2. `pip install -r requirements.txt`/`pip3 install -r requirements.txt`
+
 3. Have the following project structure
 ```
 parent_folder/
