@@ -1,3 +1,5 @@
 .env
 *__pycache__
 .venv
+*.gdrive-server-credentials.json
+*gcp-oauth.keys.json
