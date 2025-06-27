@@ -3,3 +3,4 @@
 .venv
 *.gdrive-server-credentials.json
 *gcp-oauth.keys.json
+*.gmail-server-credentials.json
