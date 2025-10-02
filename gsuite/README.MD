@@ -2,7 +2,10 @@
 
 - Create a new Google Cloud project
 
-- Enable the Google Drive API, Gmail API
+- Enable the Google Drive API, Gmail API, 
+- Maps API (May need a set-up a billing account), 
+    - Enabled all APIs, Restrict requests to localhost if you want (for testing)
+    - Get started here: https://developers.google.com/maps/documentation/places/web-service/get-api-key
 
 - Configure an OAuth consent screen
 
@@ -31,3 +34,8 @@
 
 - Refresh token automatically
 - Avoid re-building client for every function call
+
+# Sample prompts
+- What is the distance between Connaught Place New Delhi and Khan Market?
+- Give me directions from Connaught Place New Delhi and Khan Market?
+- Give me restaurants in Khan Market New Delhi

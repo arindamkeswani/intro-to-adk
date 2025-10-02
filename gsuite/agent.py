@@ -14,6 +14,9 @@ from email import message_from_bytes
 import base64
 from base64 import urlsafe_b64decode
 
+import googlemaps
+from datetime import datetime
+
 
 KEYFILE_PATH = os.getcwd() + "/gsuite/credentials/gcp-oauth.keys.json"
 GDRIVE_CREDENTIALS_PATH = os.getcwd() + "/gsuite/credentials/.gdrive-server-credentials.json"
@@ -193,16 +196,81 @@ async def delete_email(message_id: str) -> str:
     client.users().messages().trash(userId="me", id=message_id).execute()
     return "Email deleted successfully."
 
+# -- Google Maps Client --
+gmaps = googlemaps.Client(key=os.environ['GOOGLE_MAPS_API_KEY'])
 
+async def get_directions(origin: str, destination: str, mode: str = "driving") -> str:
+    """Get directions between two locations. Make sure to convert response to human readable format."""
+    now = datetime.now()
+    directions_result = gmaps.directions(origin, destination, mode=mode, departure_time=now)
+    if not directions_result:
+        return "No directions found."
+    
+    steps = directions_result[0]['legs'][0]['steps']
+
+    directions = []
+    for step in steps:
+        instructions = step['html_instructions']
+        directions.append(instructions)
+    
+    return {
+            instructions: "\n".join(directions)
+        }
+
+async def get_distance(origin: str, destination: str, mode: str = "driving") -> str:
+    """Get distance between two locations. Make sure to convert response to human readable format."""
+    now = datetime.now()
+    distance_result = gmaps.distance_matrix(origin, destination, mode=mode, departure_time=now)
+
+    if not distance_result:
+        return "No distance found."
+    
+    element = distance_result['rows'][0]['elements'][0]
+    if element['status'] != 'OK':
+        return "No distance found."
+    
+    distance = element['distance']['text']
+    duration = element['duration']['text']
+    
+    return {
+            "distance": distance,
+            "duration": duration
+        }
+
+async def get_places(query: str, location: dict, radius: int = 500) -> str:
+    """Get places of interest around a location (which is the latitude and longitude of the input location). Make sure to convert response to human readable format."""
+    places_result = gmaps.places_nearby(location=location, keyword=query, radius=radius)
+
+    if not places_result or 'results' not in places_result:
+        return "No places found."
+    
+    places = places_result['results']
+    place_names = [place['name'] for place in places]
+    
+    return {
+            "places": place_names
+        }
+
+async def get_lat_long(address: str) -> dict:
+    """Get latitude and longitude of a location."""
+    geocode_result = gmaps.geocode(address)
+    if not geocode_result:
+        return {"lat": None, "lng": None}
+    
+    location = geocode_result[0]['geometry']['location']
+    return {"latitude": location['lat'], "longitude": location['lng']}
 
 root_agent = LlmAgent(
     model='gemini-2.0-flash',
     name='gsuite_assistant_agent',
     instruction= 'Help the user use Google\'s services. ' \
     'Manage their files. You can list files, search files, read files on Google Drive.'\
-    'You can also read, send & delete emails, and get the current user\'s information.',
+    'You can also read, send & delete emails, and get the current user\'s information.'\
+    'You can also get directions & distance between two locations (you can differentiate between driving and walking metrics), places of interest, and latitude/longitude of places in a location using Google Maps.'\
+    'To get nearby places, you will need the latitude and longitude of the location. Use the get_lat_long function to get the latitude and longitude of a location.',
     tools=[
         list_drive_files, read_drive_file, 
-        get_current_user_email_id, send_email, get_emails, read_email_content, delete_email
+        get_current_user_email_id, send_email, get_emails, read_email_content, delete_email,
+        get_directions, get_distance, get_places, get_lat_long
     ],
 )
