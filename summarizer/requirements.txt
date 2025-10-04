@@ -1,0 +1,2 @@
+google-cloud-aiplatform[adk,agent_engines]
+google-adk

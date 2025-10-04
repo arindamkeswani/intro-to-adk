@@ -39,6 +39,31 @@ Note: ElevenLabs integration will need ffmpeg
 - `where ffmpeg` to get installation folder
 - Copy files to Scripts folder
 
+# Deployment
+
+## Google Cloud CLI set-up
+- Install CLI ([docs](https://cloud.google.com/sdk/docs/install-sdk))
+- Init CLI & Set required project
+
+## Local actions
+- Install UX ([docs](https://docs.astral.sh/uv/getting-started/installation/#standalone-installer))
+- Go to project root & run `uvx agent-starter-pack enhance --adk -d agent_engine`
+
+## GCP & Vertex AI Set-up
+- Create Project on GCP
+- Enable Vertex AI APIs
+- Create Bucket
+<!-- - Copy Project ID, bucket, location in depl -->
+
+## Deployment
+- Follow [docs](https://google.github.io/adk-docs/deploy/agent-engine/#deploy-ad)
+- Go to Project Root (folder in which a specific agent logic can be found)
+- Note: Terraform should be installed for this step
+- `make setup-dev-env` - This creates a developer environment
+- `make backend`
+
+## Testing
+- Get Query URL from Agent Engine page
 
 Link to generate Reddit API Key: https://www.reddit.com/prefs/apps/
 
